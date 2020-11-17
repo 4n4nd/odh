@@ -11,6 +11,28 @@ spec:
   securityContext: {}
   ruleSelector: {}
   replicas: 2
+  containers:
+  - name: oauth-proxy
+    image: openshift/oauth-proxy:latest
+    imagePullPolicy: IfNotPresent
+    ports:
+    - containerPort: 8443
+      name: public
+    args:
+    - --https-address=:8443
+    - --provider=openshift
+    - --openshift-service-account=proxy
+    - --upstream=http://prometheus-operated:9090
+    - --tls-cert=/etc/tls/private/tls.crt
+    - --tls-key=/etc/tls/private/tls.key
+    - --cookie-secret=SECRET
+    volumeMounts:
+    - mountPath: /etc/tls/private
+      name: proxy-tls
+  volumes:
+  - name: proxy-tls
+    secret:
+      secretName: proxy-tls
   remoteRead:
     - url: "http://prometheus-operated.opf-jupyterhub.svc.cluster.local:9090\
             /api/v1/read"

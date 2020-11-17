@@ -9,4 +9,4 @@ spec:
     kind: Service
     name: prometheus-operated
   port:
-    targetPort: web
+    targetPort: public
