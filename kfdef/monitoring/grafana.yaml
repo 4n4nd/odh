@@ -13,7 +13,7 @@ spec:
             auto_assign_org: true
             auto_assign_org_role: Admin
         auth.anonymous:
-            enabled: false
+            enabled: true
         log:
             level: warn
             mode: console
@@ -40,7 +40,7 @@ spec:
         - -cookie-secret=SECRET
         - -skip-auth-regex=^/metrics,/api/datasources,/api/dashboards
         - '-openshift-sar={"resource": "namespaces", "verb": "get", "resourceName":
-            "dh-psi-monitoring", "namespace": "dh-psi-monitoring"}'
+            "opf-stage", "namespace": "opf-stage"}'
         image: registry.redhat.io/openshift4/ose-oauth-proxy:v4.4
         name: oauth-proxy
         ports:
@@ -50,9 +50,6 @@ spec:
         volumeMounts:
         -   mountPath: /etc/tls/private
             name: secret-grafana-tls
-            readOnly: false
-        -   mountPath: /etc/proxy/secrets
-            name: secret-grafana-proxy
             readOnly: false
     ingress:
         enabled: true
