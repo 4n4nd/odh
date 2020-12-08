@@ -2,10 +2,10 @@ apiVersion: core.observatorium.io/v1alpha1
 kind: Observatorium
 metadata:
   labels:
-    app.kubernetes.io/instance: observatorium-opf
+    app.kubernetes.io/instance: opf-observatorium
     app.kubernetes.io/name: observatorium-cr
     app.kubernetes.io/part-of: observatorium
-  name: observatorium-opf
+  name: opf-observatorium
 spec:
   api:
     image: quay.io/observatorium/observatorium:master-2020-09-08-v0.1.1-142-g61a908f
@@ -16,7 +16,7 @@ spec:
         - read-write
         subjects:
         - kind: user
-          name: asanmukh
+          name: admin@example.com
       roles:
       - name: read-write
         permissions:
@@ -27,7 +27,7 @@ spec:
         - metrics
         tenants:
         - test
-    replicas: 1
+    replicas: 0
     tenants:
     - id: 1610b0c3-c509-4592-a256-a1871353dbfa
       name: test
@@ -45,12 +45,13 @@ spec:
       serverName: observatorium-opf-observatorium-api.opf-monitoring.svc.cluster.local
     version: master-2020-09-08-v0.1.1-142-g61a908f
   apiQuery:
+    replicas: 0
     image: quay.io/thanos/thanos:master-2020-08-12-70f89d83
     version: master-2020-08-12-70f89d83
   compact:
     enableDownsampling: false
     image: quay.io/thanos/thanos:master-2020-08-12-70f89d83
-    replicas: 1
+    replicas: 0
     retentionResolution1h: 1s
     retentionResolution5m: 1s
     retentionResolutionRaw: 14d
@@ -66,8 +67,7 @@ spec:
   - hashring: default
     tenants: []
   loki:
-    auth_enabled: false
-    image: docker.io/grafana/loki:1.6.1
+    image: quay.io/4n4nd/loki:1.6.1
     replicas:
       distributor: 1
       ingester: 1
@@ -127,12 +127,12 @@ spec:
     cache:
       exporterImage: prom/memcached-exporter:v0.6.0
       exporterVersion: v0.6.0
-      image: docker.io/memcached:1.6.3-alpine
+      image: quay.io/4n4nd/memcached:1.6.3-alpine
       memoryLimitMb: 1024
-      replicas: 1
+      replicas: 0
       version: 1.6.3-alpine
     image: quay.io/thanos/thanos:master-2020-08-12-70f89d83
-    shards: 1
+    shards: 0
     version: master-2020-08-12-70f89d83
     volumeClaimTemplate:
       spec:
@@ -142,5 +142,6 @@ spec:
           requests:
             storage: 5Gi
   thanosReceiveController:
+    replicas: 0
     image: quay.io/observatorium/thanos-receive-controller:master-2020-02-06-b66e0c8
     version: master-2020-02-06-b66e0c8
